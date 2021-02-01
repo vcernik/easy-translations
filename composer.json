@@ -1,5 +1,5 @@
 {
-    "name": "vcernik/EasyTranslations",
+    "name": "vcernik/easy-translations",
     "description": "Converting translation NEON files to Excel and back (Excel to NEON)",
     "type": "library",
     "keywords": [
@@ -9,7 +9,7 @@
       "translation"
     ],
     "license":  ["BSD-3-Clause", "GPL-2.0-only", "GPL-3.0-only"],
-    "homepage": "https://github.com/vcernik/EasyTranslations",
+    "homepage": "https://github.com/vcernik/easy-translations",
     "authors": [
       {
         "name": "Václav Černík",

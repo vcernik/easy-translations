@@ -1,4 +1,4 @@
-# EasyTranslations
+# Easy Translations
 Converting translation NEON files to Excel and back (Excel to NEON)
 
 ## Converting NEON files to Excel
