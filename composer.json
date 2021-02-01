@@ -1,0 +1,30 @@
+{
+    "name": "vcernik/EasyTranslations",
+    "description": "Converting translation NEON files to Excel and back (Excel to NEON)",
+    "type": "library",
+    "keywords": [
+      "neon",
+      "excel",
+      "nette",
+      "translation"
+    ],
+    "license":  ["BSD-3-Clause", "GPL-2.0-only", "GPL-3.0-only"],
+    "homepage": "https://github.com/vcernik/EasyTranslations",
+    "authors": [
+      {
+        "name": "Václav Černík",
+        "email": "vaclav@cernik.name"
+      }
+    ],
+    "require": {
+        "nette/neon": "^3.2",
+        "spatie/simple-excel": "^1.2",
+        "nette/utils": "^3.2"
+    },
+    "require-dev": {
+        "nette/tester": "^2.3"
+    },
+    "autoload": {
+      "classmap": ["src/"]
+    }
+}
