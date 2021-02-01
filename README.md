@@ -1,6 +1,11 @@
 # Easy Translations
 Converting translation NEON files to Excel and back (Excel to NEON)
 
+## Install
+To install the latest version of `vcernik/easy-translations` use [Composer](https://getcomposer.com).
+
+    composer require vcernik/easy-translations
+
 ## Converting NEON files to Excel
 You can convert to .xlsx or .csv file (it depends just on extension).
 
