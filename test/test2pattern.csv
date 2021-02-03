@@ -1,4 +1,4 @@
-﻿title,id,cs,en
+﻿domain,id,cs,en
 user,login.username,"Uživatelské jméno",Username
 user,login.password,Heslo,Password
 user,title,,User;

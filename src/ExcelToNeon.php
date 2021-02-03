@@ -18,25 +18,25 @@ class ExcelToNeon{
             
         $rows->each(function(array $row) {
             
-            if(!isset($this->output_array[$row['title']])){
-                $this->output_array[$row['title']]=[];
+            if(!isset($this->output_array[$row['domain']])){
+                $this->output_array[$row['domain']]=[];
             }
 
             foreach($row as $column=>$value){
-                if($column!="title" and $column!="id"){
+                if($column!="domain" and $column!="id"){
                     //jde o sloupec s překlady
                     $lang=$column;
 
                     //ověřím jestli je daný jazyk založen
-                    if(!isset($this->output_array[$row['title']][$lang])){
-                        $this->output_array[$row['title']][$lang]=[];
+                    if(!isset($this->output_array[$row['domain']][$lang])){
+                        $this->output_array[$row['domain']][$lang]=[];
                     }
 
                     //přidám záznam
                     if($value!=null or $this->empty_strings){
                         $array=$this->makeArray(explode(".",$row['id']),$value);
                         
-                        $this->output_array[$row['title']][$lang]=Arrays::mergeTree($this->output_array[$row['title']][$lang], $array);                    
+                        $this->output_array[$row['domain']][$lang]=Arrays::mergeTree($this->output_array[$row['domain']][$lang], $array);                    
                     }
                 }
             }
@@ -46,8 +46,10 @@ class ExcelToNeon{
         //creating neon files
         foreach($this->output_array as $file=>$rest){
             foreach($rest as $language=>$array){
-                $neon=Neon::encode($array, Neon::BLOCK); 
-                file_put_contents($output_folder.'/'.$file.'.'.$language.'.neon',$neon);
+                if(!empty($array)){
+                    $neon=Neon::encode($array, Neon::BLOCK); 
+                    file_put_contents($output_folder.'/'.$file.'.'.$language.'.neon',$neon);
+                }
             }
         }
         

@@ -23,22 +23,26 @@ final class NeonToExcel{
      */
     private function loadNeonFiles(string $folder,$output){
         $files = glob($folder.'/*.neon');
+        $files_grouped=[];
         foreach($files as $file){
-            $neon=Neon::decode(file_get_contents($file));    
+            $neon=Neon::decode(file_get_contents($file));
+
+            if($neon!==null){
+                $exploded_path=explode("/",$file);
+                $filename=$exploded_path[count($exploded_path)-1];
+
+                $exploded_name=explode(".",$filename);
+                $title=$exploded_name[0];
+                $language=$exploded_name[1];
+
+                //přidám do seznamu dostupných jazyků
+                if(!in_array($language,$this->languages)){
+                    $this->languages[]=$language;
+                }
+
+                $files_grouped[$title][$language]=$this->parseMultiNeon($neon);
             
-            $exploded_path=explode("/",$file);
-            $filename=$exploded_path[count($exploded_path)-1];
-
-            $exploded_name=explode(".",$filename);
-            $title=$exploded_name[0];
-            $language=$exploded_name[1];
-
-            //přidám do seznamu dostupných jazyků
-            if(!in_array($language,$this->languages)){
-                $this->languages[]=$language;
             }
-
-            $files_grouped[$title][$language]=$this->parseMultiNeon($neon);
         }
         
         return $files_grouped;
@@ -89,7 +93,7 @@ final class NeonToExcel{
         foreach($finalArray as $title=>$section){
             foreach($section as $id=>$row){
                 $excelrow=[
-                    'title' => $title,
+                    'domain' => $title,
                     'id' => $id
                 ];
                 foreach($this->languages as $language){
@@ -111,7 +115,7 @@ final class NeonToExcel{
     /**
      * Convert multidimensional array into: xx.yy.zz => (string) value
      */
-    private function parseMultiNeon($array){
+    private function parseMultiNeon(array $array){
         $translations=[];
 
         foreach($this->getKeys($array) as $key){
@@ -127,7 +131,7 @@ final class NeonToExcel{
     /**
      * Get keys of multidimensional array like xx.yy.zz
      */
-    private function getKeys($array){
+    private function getKeys(array $array){
         $keys=[];
         foreach(array_keys($array) as $key){
             
