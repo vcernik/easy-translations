@@ -17,9 +17,9 @@
       }
     ],
     "require": {
-        "nette/neon": "^3.2",
-        "spatie/simple-excel": "^1.2",
-        "nette/utils": "^3.2"
+        "nette/neon": "^3.4",
+        "spatie/simple-excel": "^3.4",
+        "nette/utils": "^4.0"
     },
     "require-dev": {
         "nette/tester": "^2.3"
