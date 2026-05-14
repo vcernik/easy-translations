@@ -10,55 +10,68 @@ class ExcelToNeon{
     private $output_array;
     private $empty_strings;
 
-    public function convert($file,$output_folder,$empty_strings=false){
-        $this->empty_strings=$empty_strings;
-        $this->output_array=[];
+
+    /**
+     * @param string $file
+     * @param string $output_folder
+     * @param bool $empty_strings
+     * @param array $columnNames ['domain' => 'domain', 'id' => 'id']
+     */
+    public function convert($file, $output_folder, $empty_strings = false, $columnNames = ['domain' => 'domain', 'id' => 'id']) {
+        $this->empty_strings = $empty_strings;
+        $this->output_array = [];
+
+        $domainCol = $columnNames['domain'] ?? 'domain';
+        $idCol = $columnNames['id'] ?? 'id';
 
         $rows = SimpleExcelReader::create($file)->getRows();
-            
-        $rows->each(function(array $row) {
-            
-            if(!isset($this->output_array[$row['domain']])){
-                $this->output_array[$row['domain']]=[];
+
+        $rows->each(function(array $row) use ($domainCol, $idCol) {
+            if (!isset($row[$domainCol]) || !isset($row[$idCol])) {
+                // přeskoč řádek pokud chybí doména nebo id
+                return;
             }
 
-            foreach($row as $column=>$value){
-                if($column!="domain" and $column!="id"){
+            if (!isset($this->output_array[$row[$domainCol]])) {
+                $this->output_array[$row[$domainCol]] = [];
+            }
+
+            foreach ($row as $column => $value) {
+                if ($column !== $domainCol && $column !== $idCol) {
                     //jde o sloupec s překlady
-                    $lang=$column;
+                    $lang = $column;
 
                     //ověřím jestli je daný jazyk založen
-                    if(!isset($this->output_array[$row['domain']][$lang])){
-                        $this->output_array[$row['domain']][$lang]=[];
+                    if (!isset($this->output_array[$row[$domainCol]][$lang])) {
+                        $this->output_array[$row[$domainCol]][$lang] = [];
                     }
 
-                    //přidám záznam
-                    if($value!=null or $this->empty_strings){
-                        $array=$this->makeArray(explode(".",$row['id']),$value);
-                        
-                        $this->output_array[$row['domain']][$lang]=Arrays::mergeTree($this->output_array[$row['domain']][$lang], $array);                    
+                    //přidám záznam pouze pokud není hodnota prázdná nebo je povoleno ukládat prázdné řetězce
+                    if (
+                        ($this->empty_strings && $value !== null) ||
+                        (!$this->empty_strings && $value !== null && $value !== '')
+                    ) {
+                        $array = $this->makeArray(explode('.', $row[$idCol]), $value);
+                        $this->output_array[$row[$domainCol]][$lang] = Arrays::mergeTree($this->output_array[$row[$domainCol]][$lang], $array);
                     }
                 }
             }
-
         });
 
-		 // vytvoření složky pokud neexistuje
+        // vytvoření složky pokud neexistuje
         if (!is_dir($output_folder)) {
             mkdir($output_folder, 0777, true);
         }
-		
+
         //creating neon files
-        foreach($this->output_array as $file=>$rest){
-            foreach($rest as $language=>$array){
-                if(!empty($array)){
-                    $neon=Neon::encode($array, Neon::BLOCK); 
-                    file_put_contents($output_folder.'/'.$file.'.'.$language.'.neon',$neon);
+        foreach ($this->output_array as $file => $rest) {
+            foreach ($rest as $language => $array) {
+                if (!empty($array)) {
+                    $neon = Neon::encode($array, blockMode: true);
+                    file_put_contents($output_folder . '/' . $file . '.' . $language . '.neon', $neon);
                 }
             }
         }
-        
-
     }
 
 

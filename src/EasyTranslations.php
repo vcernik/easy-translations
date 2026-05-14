@@ -18,9 +18,14 @@ final class EasyTranslations
 	 * Covert Excel file to NEON files
      * $emptyStrings=true possible leads to empty string in final NEON files
 	 */
-	public static function ExcelToNeon(string $inputFile,string $outputFolder,bool $emptyStrings=false)
+	public static function ExcelToNeon(
+		string $inputFile,
+		string $outputFolder,
+		bool $emptyStrings = false,
+		array $columnNames = ['domain' => 'domain', 'id' => 'id']
+	)
 	{
         $easy=new ExcelToNeon;
-        $easy->convert($inputFile,$outputFolder,$emptyStrings);
+        $easy->convert($inputFile,$outputFolder,$emptyStrings,$columnNames);
 	}
 }
