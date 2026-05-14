@@ -43,6 +43,11 @@ class ExcelToNeon{
 
         });
 
+		 // vytvoření složky pokud neexistuje
+        if (!is_dir($output_folder)) {
+            mkdir($output_folder, 0777, true);
+        }
+		
         //creating neon files
         foreach($this->output_array as $file=>$rest){
             foreach($rest as $language=>$array){

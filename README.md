@@ -22,3 +22,8 @@ In case of empty strings, by default it will not generate empty line in neon fil
 You can change it by this:
 
     EasyTranslations::ExcelToNeon('input.xlsx','OUTPUT FOLDER', true);
+
+
+## Develop
+
+Test: ddev php  vendor/bin/tester test
